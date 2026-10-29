@@ -7,7 +7,9 @@
 <meta name="description" content="Open a D360 account in 2 minutes. Saudi Arabia's Shariah-compliant digital bank: debit, prepaid and Ehsan cards, no hidden fees and fast transfers abroad.">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="author" content="Mina Elia">
-<meta name="theme-color" content="#ff4322">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#ffffff">
 <meta name="color-scheme" content="light">
 <meta name="format-detection" content="telephone=no">
 <!-- canonical + language alternates (swap SITE for the production domain when deploying) -->
@@ -66,6 +68,7 @@
     M('meta[property="og:image"]', I); M('meta[name="twitter:image"]', I);
     M('meta[property="og:image:alt"]', 'بنك D360: خدماتك المصرفية ببساطة مع أول بنك رقمي سعودي'); M('meta[name="twitter:image:alt"]', 'بنك D360: خدماتك المصرفية ببساطة مع أول بنك رقمي سعودي');
     M('meta[property="og:locale"]', 'ar_SA'); M('meta[property="og:locale:alternate"]', 'en_US');
+    var pf = document.createElement('link'); pf.rel = 'preload'; pf.as = 'font'; pf.type = 'font/woff2'; pf.crossOrigin = 'anonymous'; pf.href = 'assets/fonts/lyon-arabic-display-bold.woff2'; document.head.appendChild(pf);
     var ld = document.getElementById('seoLd'), src = document.getElementById('seoLdAr'); if (ld && src) ld.textContent = src.textContent;
   }
 })();
@@ -483,7 +486,12 @@
   /* =========================================================
      ARABIC — Lyon Arabic Display for headings and big text, Readex Pro for body; tracking always 0
      ========================================================= */
-  @font-face{font-family:"Lyon Arabic";src:local("Lyon Arabic Display Bold"),local("LyonArabicDisplay-Bold"),local("Lyon Arabic Display");font-weight:700;font-display:swap}
+  /* Lyon Arabic Display ships with the site (woff2), so every device — phones included — renders it */
+  @font-face{font-family:"Lyon Arabic";src:url(assets/fonts/lyon-arabic-display-light.woff2) format("woff2");font-weight:300;font-style:normal;font-display:swap}
+  @font-face{font-family:"Lyon Arabic";src:url(assets/fonts/lyon-arabic-display-regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:"Lyon Arabic";src:url(assets/fonts/lyon-arabic-display-medium.woff2) format("woff2");font-weight:500;font-style:normal;font-display:swap}
+  @font-face{font-family:"Lyon Arabic";src:url(assets/fonts/lyon-arabic-display-bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Lyon Arabic";src:url(assets/fonts/lyon-arabic-display-black.woff2) format("woff2");font-weight:900;font-style:normal;font-display:swap}
   html[lang|="ar"]{--font:"Readex Pro","Rethink Sans",system-ui,sans-serif;--font-display:"Lyon Arabic","Lyon Arabic Display","Markazi Text",serif}
   html[lang|="ar"] *{letter-spacing:0!important}
   html[lang|="ar"] .hero__title,html[lang|="ar"] .h2,html[lang|="ar"] .pf__title,html[lang|="ar"] .feature__title,html[lang|="ar"] .info__name,html[lang|="ar"] .feature__label{font-family:var(--font-display);font-weight:700}
@@ -710,6 +718,7 @@
   .faq__item[open] .faq__icon::before,.faq__item[open] .faq__icon::after{background:#fff}
   .faq__a{margin:0;padding:0 4px 24px;max-width:72ch;font:400 var(--fs-body-l)/1.6 var(--font);color:var(--ink-2)}
   html[lang|="ar"] .faq__a{line-height:1.8}
+  html[lang|="ar"] .faq__q{font-family:var(--font-display);font-weight:700;line-height:1.4}
   html[dir="rtl"] .faq{direction:rtl}
   @media (max-width:900px){.faq{padding-top:72px}.faq .wrap{gap:32px}.faq__item summary{padding:20px 0;gap:16px}.faq__a{padding:0 0 20px}.faq__icon{width:32px;height:32px}}
   @media (prefers-reduced-motion:reduce){.faq__icon{transition:none}}
@@ -718,6 +727,7 @@
 
   /* Navbar → H1: one 32px gap on every breakpoint and both languages (--nav-b = navbar bottom, measured by script) */
   :root{--hero-gap:32px}
+  @media (max-width:900px){:root{--hero-gap:52px}}   /* phone: 32px gap + 20px extra top padding */
   @media (min-width:901px) and (max-width:1100px){html .hero > .hero__copy{padding-left:40px;padding-right:40px}html .hero > .hero__copy .hero__sub{max-width:640px}}
   @media (min-width:1101px){
     .stage > .hero__copy,html[lang|="ar"] .stage > .hero__copy{top:calc((var(--nav-b, 81px) + var(--hero-gap)) / var(--s))}
