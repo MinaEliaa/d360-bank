@@ -392,6 +392,11 @@
   .sv__play{position:absolute;left:50%;top:50%;z-index:3;width:73px;height:73px;margin:-36.5px 0 0 -36.5px;border:0;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.25);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);cursor:pointer;transition:opacity .35s ease,transform .35s var(--ease),background-color .3s ease}
   .sv__play:hover{background:rgba(255,255,255,.35);transform:scale(1.06)}
   .sv__play svg{width:54px;height:54px}
+  .sv__play svg{grid-area:1/1}  /* both glyphs share the circle's exact centre */
+  .sv__play .ic-pause{display:none}
+  .sv.is-playing .sv__play .ic-play{display:none}
+  .sv.is-playing .sv__play .ic-pause{display:block}
+  @media (hover:hover){.sv.is-playing:hover .sv__play,.sv.is-playing .sv__play:focus-visible{opacity:1;transform:none;pointer-events:auto}}
   .sv.is-playing .sv__play{opacity:0;transform:scale(.85);pointer-events:none}
   .sv.is-playing .sv__who,.sv.is-playing .sv__shade{opacity:0;transition:opacity .4s ease}
   .sv__play:focus-visible,.sv__hit:focus-visible{outline:2px solid #fff;outline-offset:-4px}
@@ -726,12 +731,21 @@
   .col h3{font-size:17px}
 
   /* Navbar → H1: one 32px gap on every breakpoint and both languages (--nav-b = navbar bottom, measured by script) */
-  :root{--hero-gap:32px}
-  @media (max-width:900px){:root{--hero-gap:52px}}   /* phone: 32px gap + 20px extra top padding */
+  :root{--hero-gap:72px}   /* 32px + 40px more space above the H1 */
+  @media (max-width:900px){:root{--hero-gap:92px}}   /* phone: 32px + 20px + 40px */
   @media (min-width:901px) and (max-width:1100px){html .hero > .hero__copy{padding-left:40px;padding-right:40px}html .hero > .hero__copy .hero__sub{max-width:640px}}
   @media (min-width:1101px){
     .stage > .hero__copy,html[lang|="ar"] .stage > .hero__copy{top:calc((var(--nav-b, 81px) + var(--hero-gap)) / var(--s))}
   }
+
+  /* Banking cards: larger titles (still below H2 on every breakpoint) */
+  :root{--fs-h3-feature:36px}
+  @media (max-width:1100px){:root{--fs-h3-feature:30px}}
+  @media (max-width:900px){:root{--fs-h3-feature:28px}}
+  html[lang|="ar"]{--fs-h3-feature:40px}
+  @media (max-width:1100px){html[lang|="ar"]{--fs-h3-feature:34px}}
+  @media (max-width:900px){html[lang|="ar"]{--fs-h3-feature:30px}}
+  .feature__title,html[lang|="ar"] .feature__title{font-size:var(--fs-h3-feature)}
 </style>
 
 </head>
@@ -1034,13 +1048,13 @@
     </div>
     <div class="sv__viewport" id="svRow" data-lenis-prevent-horizontal tabindex="0" aria-label="Pink Card stories, scroll sideways for more">
       <div class="sv__track">
-          <figure class="sv" data-video="../assets/story-1.mp4"><img class="sv__poster" src="../assets/st-1.webp" alt="D360 Pink Card reveal" loading="lazy" decoding="async"><video class="sv__video" playsinline preload="metadata" aria-label="D360 Pink Card reveal"></video><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@d360bank<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">65k followers</p></div><button class="sv__hit" type="button" aria-label="Pause @d360bank's story" tabindex="-1"></button><button class="sv__play" type="button" aria-label="Play @d360bank's story"><svg viewBox="0 0 55 55" fill="none" aria-hidden="true"><path d="M18.1914 15.5042V39.0603C18.1914 40.8565 20.1696 41.9479 21.693 40.9702L40.2013 29.1922C40.5253 28.9871 40.7923 28.7034 40.9772 28.3675C41.1622 28.0316 41.2591 27.6544 41.2591 27.2709C41.2591 26.8874 41.1622 26.5102 40.9772 26.1742C40.7923 25.8383 40.5253 25.5546 40.2013 25.3496L21.693 13.5943C21.35 13.3725 20.9536 13.2473 20.5454 13.2321C20.1373 13.2168 19.7326 13.312 19.374 13.5075C19.0154 13.7031 18.7163 13.9919 18.5082 14.3433C18.3 14.6947 18.1906 15.0958 18.1914 15.5042Z" fill="white"/></svg></button><p class="sv__note" role="status">Video not added yet</p></figure>
+          <figure class="sv" data-video="../assets/story-1.mp4"><img class="sv__poster" src="../assets/st-1.webp" alt="D360 Pink Card reveal" loading="lazy" decoding="async"><video class="sv__video" playsinline preload="metadata" aria-label="D360 Pink Card reveal"></video><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@d360bank<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">65k followers</p></div><button class="sv__hit" type="button" aria-label="Pause @d360bank's story" tabindex="-1"></button><button class="sv__play" type="button" aria-label="Play @d360bank's story"><svg class="ic-play" viewBox="0 0 55 55" fill="none" aria-hidden="true"><path transform="translate(-2.23 0.23)" d="M18.1914 15.5042V39.0603C18.1914 40.8565 20.1696 41.9479 21.693 40.9702L40.2013 29.1922C40.5253 28.9871 40.7923 28.7034 40.9772 28.3675C41.1622 28.0316 41.2591 27.6544 41.2591 27.2709C41.2591 26.8874 41.1622 26.5102 40.9772 26.1742C40.7923 25.8383 40.5253 25.5546 40.2013 25.3496L21.693 13.5943C21.35 13.3725 20.9536 13.2473 20.5454 13.2321C20.1373 13.2168 19.7326 13.312 19.374 13.5075C19.0154 13.7031 18.7163 13.9919 18.5082 14.3433C18.3 14.6947 18.1906 15.0958 18.1914 15.5042Z" fill="white"/></svg><svg class="ic-pause" viewBox="0 0 55 55" fill="none" aria-hidden="true"><rect x="18.5" y="16" width="6" height="23" rx="2" fill="white"/><rect x="30.5" y="16" width="6" height="23" rx="2" fill="white"/></svg></button><p class="sv__note" role="status">Video not added yet</p></figure>
           <figure class="sv"><img class="sv__poster" src="../assets/st-2.webp" alt="The pink mailer with stickers, shared by @nursabrar" loading="lazy" decoding="async"></figure>
           <figure class="sv"><img class="sv__poster" src="../assets/st-3.webp" alt="The Pink Card on a table of tulips" loading="lazy" decoding="async"><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@ray.oof_<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">41.6k followers</p></div></figure>
-          <figure class="sv" data-video="../assets/story-4.mp4"><img class="sv__poster" src="../assets/st-4.webp" alt="Clara showing the Pink Card mailer" loading="lazy" decoding="async"><video class="sv__video" playsinline preload="metadata" aria-label="Clara showing the Pink Card mailer"></video><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@clarahair_me<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">403k followers</p></div><button class="sv__hit" type="button" aria-label="Pause @clarahair_me's story" tabindex="-1"></button><button class="sv__play" type="button" aria-label="Play @clarahair_me's story"><svg viewBox="0 0 55 55" fill="none" aria-hidden="true"><path d="M18.1914 15.5042V39.0603C18.1914 40.8565 20.1696 41.9479 21.693 40.9702L40.2013 29.1922C40.5253 28.9871 40.7923 28.7034 40.9772 28.3675C41.1622 28.0316 41.2591 27.6544 41.2591 27.2709C41.2591 26.8874 41.1622 26.5102 40.9772 26.1742C40.7923 25.8383 40.5253 25.5546 40.2013 25.3496L21.693 13.5943C21.35 13.3725 20.9536 13.2473 20.5454 13.2321C20.1373 13.2168 19.7326 13.312 19.374 13.5075C19.0154 13.7031 18.7163 13.9919 18.5082 14.3433C18.3 14.6947 18.1906 15.0958 18.1914 15.5042Z" fill="white"/></svg></button><p class="sv__note" role="status">Video not added yet</p></figure>
+          <figure class="sv" data-video="../assets/story-4.mp4"><img class="sv__poster" src="../assets/st-4.webp" alt="Clara showing the Pink Card mailer" loading="lazy" decoding="async"><video class="sv__video" playsinline preload="metadata" aria-label="Clara showing the Pink Card mailer"></video><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@clarahair_me<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">403k followers</p></div><button class="sv__hit" type="button" aria-label="Pause @clarahair_me's story" tabindex="-1"></button><button class="sv__play" type="button" aria-label="Play @clarahair_me's story"><svg class="ic-play" viewBox="0 0 55 55" fill="none" aria-hidden="true"><path transform="translate(-2.23 0.23)" d="M18.1914 15.5042V39.0603C18.1914 40.8565 20.1696 41.9479 21.693 40.9702L40.2013 29.1922C40.5253 28.9871 40.7923 28.7034 40.9772 28.3675C41.1622 28.0316 41.2591 27.6544 41.2591 27.2709C41.2591 26.8874 41.1622 26.5102 40.9772 26.1742C40.7923 25.8383 40.5253 25.5546 40.2013 25.3496L21.693 13.5943C21.35 13.3725 20.9536 13.2473 20.5454 13.2321C20.1373 13.2168 19.7326 13.312 19.374 13.5075C19.0154 13.7031 18.7163 13.9919 18.5082 14.3433C18.3 14.6947 18.1906 15.0958 18.1914 15.5042Z" fill="white"/></svg><svg class="ic-pause" viewBox="0 0 55 55" fill="none" aria-hidden="true"><rect x="18.5" y="16" width="6" height="23" rx="2" fill="white"/><rect x="30.5" y="16" width="6" height="23" rx="2" fill="white"/></svg></button><p class="sv__note" role="status">Video not added yet</p></figure>
           <figure class="sv"><img class="sv__poster" src="../assets/st-5.webp" alt="Two hands holding Pink Cards" loading="lazy" decoding="async"></figure>
           <figure class="sv"><img class="sv__poster" src="../assets/st-6.webp" alt="A phone covered in Pink Card stickers" loading="lazy" decoding="async"></figure>
-          <figure class="sv" data-video="../assets/story-7.mp4"><img class="sv__poster" src="../assets/st-7.webp" alt="The Pink Card mailer on a café table" loading="lazy" decoding="async"><video class="sv__video" playsinline preload="metadata" aria-label="The Pink Card mailer on a café table"></video><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@d360bank<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">65k followers</p></div><button class="sv__hit" type="button" aria-label="Pause @d360bank's story" tabindex="-1"></button><button class="sv__play" type="button" aria-label="Play @d360bank's story"><svg viewBox="0 0 55 55" fill="none" aria-hidden="true"><path d="M18.1914 15.5042V39.0603C18.1914 40.8565 20.1696 41.9479 21.693 40.9702L40.2013 29.1922C40.5253 28.9871 40.7923 28.7034 40.9772 28.3675C41.1622 28.0316 41.2591 27.6544 41.2591 27.2709C41.2591 26.8874 41.1622 26.5102 40.9772 26.1742C40.7923 25.8383 40.5253 25.5546 40.2013 25.3496L21.693 13.5943C21.35 13.3725 20.9536 13.2473 20.5454 13.2321C20.1373 13.2168 19.7326 13.312 19.374 13.5075C19.0154 13.7031 18.7163 13.9919 18.5082 14.3433C18.3 14.6947 18.1906 15.0958 18.1914 15.5042Z" fill="white"/></svg></button><p class="sv__note" role="status">Video not added yet</p></figure>
+          <figure class="sv" data-video="../assets/story-7.mp4"><img class="sv__poster" src="../assets/st-7.webp" alt="The Pink Card mailer on a café table" loading="lazy" decoding="async"><video class="sv__video" playsinline preload="metadata" aria-label="The Pink Card mailer on a café table"></video><div class="sv__shade" aria-hidden="true"></div><div class="sv__who"><p class="sv__handle">@d360bank<img src="../assets/verified.webp" alt="Verified" width="35" height="35"></p><p class="sv__fans">65k followers</p></div><button class="sv__hit" type="button" aria-label="Pause @d360bank's story" tabindex="-1"></button><button class="sv__play" type="button" aria-label="Play @d360bank's story"><svg class="ic-play" viewBox="0 0 55 55" fill="none" aria-hidden="true"><path transform="translate(-2.23 0.23)" d="M18.1914 15.5042V39.0603C18.1914 40.8565 20.1696 41.9479 21.693 40.9702L40.2013 29.1922C40.5253 28.9871 40.7923 28.7034 40.9772 28.3675C41.1622 28.0316 41.2591 27.6544 41.2591 27.2709C41.2591 26.8874 41.1622 26.5102 40.9772 26.1742C40.7923 25.8383 40.5253 25.5546 40.2013 25.3496L21.693 13.5943C21.35 13.3725 20.9536 13.2473 20.5454 13.2321C20.1373 13.2168 19.7326 13.312 19.374 13.5075C19.0154 13.7031 18.7163 13.9919 18.5082 14.3433C18.3 14.6947 18.1906 15.0958 18.1914 15.5042Z" fill="white"/></svg><svg class="ic-pause" viewBox="0 0 55 55" fill="none" aria-hidden="true"><rect x="18.5" y="16" width="6" height="23" rx="2" fill="white"/><rect x="30.5" y="16" width="6" height="23" rx="2" fill="white"/></svg></button><p class="sv__note" role="status">Video not added yet</p></figure>
       </div>
     </div>
   </section>
@@ -1299,7 +1313,15 @@
     if (mob) {
       const top = Math.round(heroCopy.offsetTop + heroCopy.offsetHeight + 12 - 400 * s);
       stage.style.top = top + 'px'; heroEl.style.height = Math.round(top + (root.clientWidth > 900 ? 1060 : 1000) * s) + 'px';
-    } else { stage.style.top = ''; heroEl.style.height = ''; }
+    } else {
+      stage.style.top = ''; heroEl.style.height = ''; heroCopy.style.top = '';
+      // keep at least 24px between the subtitle and the card stack (top card sits at 427 on the 1440 stage)
+      const over = heroCopy.offsetTop + heroCopy.offsetHeight - (427 - 24 / s);
+      if (over > 0) {   // move the card stack down (not the heading up) so the H1 keeps its space under the navbar
+        heroCopy.style.top = (heroCopy.offsetTop - over) + 'px';
+        stage.style.top = Math.ceil(over * s) + 'px'; heroEl.style.height = Math.ceil((1060 + over) * s) + 'px';
+      }
+    }
   }
   function measureFlight() {
     vh = innerHeight;
@@ -1662,7 +1684,7 @@
   const mlStk = [...document.querySelectorAll('.ml__stk')];
   function measureML() {
     const vw = root.clientWidth, vh = innerHeight, mob = vw <= 900;
-    const k = Math.max(0.55, Math.min(1, (vh - 200) / 639, (vw - 48) / 411));
+    const k = Math.max(0.45, Math.min(1, (vh - 200) / 639, (vw - 48) / 411) * (vw <= 900 ? 0.72 : vw <= 1100 ? 0.78 : 1));   // tablet/phone: a smaller mailer
     mlStage.style.setProperty('--k', k.toFixed(4));
     const W = mlStage.clientWidth, H = mlStage.clientHeight, size = vw <= 1100 ? Math.max(0.78, vw / 1440) : Math.min(1, vw / 1440);
     mlStk.forEach((el, i) => {
@@ -1790,7 +1812,7 @@
       v.addEventListener('pause', () => { f.classList.remove('is-playing'); if (!v.ended) f.classList.add('is-paused'); hit.tabIndex = -1; });
       v.addEventListener('ended', () => { f.classList.remove('is-playing', 'is-paused'); v.currentTime = 0; playBtn.focus({ preventScroll: true }); });
       v.addEventListener('error', () => { f.classList.remove('is-playing', 'is-paused'); v.removeAttribute('src'); f.classList.add('is-missing'); setTimeout(() => f.classList.remove('is-missing'), 2400); });
-      playBtn.addEventListener('click', () => play(f));
+      playBtn.addEventListener('click', () => { if (!v.paused && !v.ended) v.pause(); else play(f); });
       hit.addEventListener('click', () => { if (v.paused) play(f); else { v.pause(); playBtn.focus({ preventScroll: true }); } });
     });
     // a playing story pauses once it scrolls out of view
