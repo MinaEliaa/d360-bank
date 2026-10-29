@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://minaeliaa.github.io/d360-bank/sitemap.xml
