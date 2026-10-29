@@ -731,8 +731,8 @@
   .col h3{font-size:17px}
 
   /* Navbar → H1: one 32px gap on every breakpoint and both languages (--nav-b = navbar bottom, measured by script) */
-  :root{--hero-gap:72px}   /* 32px + 40px more space above the H1 */
-  @media (max-width:900px){:root{--hero-gap:92px}}   /* phone: 32px + 20px + 40px */
+  :root{--hero-gap:32px}
+  @media (max-width:900px){:root{--hero-gap:40px}}   /* phone only */
   @media (min-width:901px) and (max-width:1100px){html .hero > .hero__copy{padding-left:40px;padding-right:40px}html .hero > .hero__copy .hero__sub{max-width:640px}}
   @media (min-width:1101px){
     .stage > .hero__copy,html[lang|="ar"] .stage > .hero__copy{top:calc((var(--nav-b, 81px) + var(--hero-gap)) / var(--s))}
@@ -746,6 +746,14 @@
   @media (max-width:1100px){html[lang|="ar"]{--fs-h3-feature:34px}}
   @media (max-width:900px){html[lang|="ar"]{--fs-h3-feature:30px}}
   .feature__title,html[lang|="ar"] .feature__title{font-size:var(--fs-h3-feature)}
+
+  /* Banking stat labels ("for opening account", "Shariah-Compliant"…): a step larger, still below the card titles */
+  :root{--fs-h4:24px}
+  @media (max-width:1100px){:root{--fs-h4:21px}}
+  @media (max-width:900px){:root{--fs-h4:19px}}
+  html[lang|="ar"]{--fs-h4:26px}
+  @media (max-width:1100px){html[lang|="ar"]{--fs-h4:23px}}
+  @media (max-width:900px){html[lang|="ar"]{--fs-h4:20px}}
 </style>
 
 </head>
@@ -819,14 +827,14 @@
     <div class="stage stage--content" id="stage">
       <div class="hero__copy">
         <h1 class="hero__title">Banking made simple,<br>the First Saudi digital way</h1>
-        <p class="hero__sub">Open your account in <strong>2 minutes</strong>, then pay, save and send money abroad, <br>fast, smart and fully Shariah-compliant</p>
+        <p class="hero__sub">Open your account in <strong>2 minutes</strong>, then pay, save and send money abroad, <br>all fully Shariah-compliant.</p>
         <script>
         /* word-by-word appear for the hero heading + description (Framer "appear" text effect: opacity 0, blur 4px, y 12px) */
         (function () {
           var copy = document.currentScript.parentNode;
           if (document.documentElement.dir === 'rtl') {
             copy.querySelector('.hero__title').innerHTML = 'خدماتك المصرفية ببساطة،<br>مع أول بنك رقمي سعودي';
-            copy.querySelector('.hero__sub').innerHTML = 'افتح حسابك في <strong>دقيقتين</strong>، ثم ادفع وادّخر وحوّل أموالك للخارج، <br>بسرعة وذكاء ومتوافق تمامًا مع أحكام الشريعة';
+            copy.querySelector('.hero__sub').innerHTML = 'افتح حسابك في <strong>دقيقتين</strong>، ثم ادفع وادّخر وحوّل أموالك للخارج، <br>متوافق تمامًا مع أحكام الشريعة.';
           }
           if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           var root = document.documentElement, i = 0;
