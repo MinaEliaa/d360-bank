@@ -756,6 +756,13 @@
   html[lang|="ar"]{--fs-h4:30px}
   @media (max-width:1100px){html[lang|="ar"]{--fs-h4:26px}}
   @media (max-width:900px){html[lang|="ar"]{--fs-h4:23px}}
+
+  /* Banking + Make your own card: cards rise from below, one after another in reading order (L→R in English, R→L in Arabic) */
+  .rv-on .rv-rise{opacity:0;translate:0 96px;transition:opacity .8s cubic-bezier(.22,1,.36,1) calc(.1s + var(--i,0) * .12s),translate 1s cubic-bezier(.22,1,.36,1) calc(.1s + var(--i,0) * .12s)}
+  .rv-on .is-in .rv-rise,html[dir="rtl"].rv-on .is-in .rv-rise{opacity:1;translate:0 0}
+  @media (prefers-reduced-motion:reduce){.rv-on .rv-rise{opacity:1;translate:none;transition:none}}
+  /* phone: the H1 keeps each of its lines on one row, sized by script to fill the container width */
+  @media (max-width:900px){html .hero > .hero__copy .hero__title,html[lang|="ar"] .hero > .hero__copy .hero__title{white-space:nowrap;text-wrap:nowrap}}
 </style>
 
 </head>
@@ -1314,12 +1321,23 @@
   }
   /* phone: the hero copy flows at real size above the scaled card stage (tablet/desktop keep it on the stage) */
   const heroEl = document.querySelector('.hero'), heroCopy = document.querySelector('.hero__copy');
+  function fitHeroTitle() {
+    const t = heroCopy.querySelector('.hero__title');
+    if (root.clientWidth > 900) { t.style.fontSize = ''; return; }
+    t.style.fontSize = '';
+    const avail = heroCopy.clientWidth - parseFloat(getComputedStyle(heroCopy).paddingLeft) - parseFloat(getComputedStyle(heroCopy).paddingRight);
+    const rg = document.createRange(); rg.selectNodeContents(t);
+    const fs = parseFloat(getComputedStyle(t).fontSize), w = rg.getBoundingClientRect().width;
+    if (!w) return;
+    t.style.fontSize = Math.floor(fs * avail / w * 10) / 10 + 'px';
+  }
   function placeHeroCopy() {
     const ni = document.querySelector('.nav__inner'), nb = ni.offsetTop + ni.offsetHeight;   // layout box, unaffected by the nav's intro slide-in
     root.style.setProperty('--nav-b', Math.round(nb) + 'px');
     const mob = root.clientWidth <= 1100;
     if (mob && heroCopy.parentNode === stage) heroEl.insertBefore(heroCopy, stage);
     else if (!mob && heroCopy.parentNode !== stage) stage.insertBefore(heroCopy, stage.firstChild);
+    fitHeroTitle();
     if (mob) {
       const top = Math.round(heroCopy.offsetTop + heroCopy.offsetHeight + 12 - 400 * s);
       stage.style.top = top + 'px'; heroEl.style.height = Math.round(top + (root.clientWidth > 900 ? 1060 : 1000) * s) + 'px';
@@ -1839,16 +1857,24 @@
   (function reveals() {
     if (reduce || !('IntersectionObserver' in window)) return;
     const groups = [
-      { sec: document.querySelector('.why'), items: '.feature' },
-      { sec: document.querySelector('.app'), items: '.pcard', pops: '.swatch' },
+      { sec: document.querySelector('.why'), items: '.feature', rise: true },
+      { sec: document.querySelector('.app'), items: '.pcard', pops: '.swatch', rise: true },
       { sec: document.querySelector('.stories'), items: '.sv' },
     ].filter(g => g.sec);
     groups.forEach(g => {
-      g.sec.querySelectorAll(g.items).forEach((el, i) => { el.classList.add('rv-item'); el.style.setProperty('--i', Math.min(i, 7)); });
+      if (g.rise) { g.sec.querySelectorAll(g.items).forEach(el => el.classList.add('rv-rise')); g.order = () => order(g); g.order(); }
+      else g.sec.querySelectorAll(g.items).forEach((el, i) => { el.classList.add('rv-item'); el.style.setProperty('--i', Math.min(i, 7)); });
       if (g.pops) g.sec.querySelectorAll(g.pops).forEach((el, i) => { el.classList.add('rv-pop'); el.style.setProperty('--i', i); });
       if (g.sec.getBoundingClientRect().top < innerHeight * 0.8) g.sec.classList.add('is-in');   // already on screen at load
     });
     document.documentElement.classList.add('rv-on');
+    // stagger follows what the eye sees: row by row, then left→right (right→left in Arabic)
+    function order(g) {
+      const rtl = document.documentElement.dir === 'rtl';
+      const els = [...g.sec.querySelectorAll(g.items)].map(el => ({ el, r: el.getBoundingClientRect() }));
+      els.sort((a, b) => (Math.round(a.r.top / 40) - Math.round(b.r.top / 40)) || (rtl ? b.r.left - a.r.left : a.r.left - b.r.left));
+      els.forEach((o, i) => o.el.style.setProperty('--i', Math.min(i, 7)));
+    }
     // snapping waits until the cards have settled, then the row starts at its first card (right in Arabic)
     const settle = sec => setTimeout(() => {
       sec.classList.add('rv-done');
@@ -1857,7 +1883,7 @@
       if (Math.abs(vp.scrollLeft - start) < 120) vp.scrollLeft = start;
     }, 1700);
     groups.forEach(g => { if (g.sec.classList.contains('is-in')) settle(g.sec); });
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); settle(e.target); io.unobserve(e.target); } }), { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const g = groups.find(x => x.sec === e.target); if (g && g.order) g.order(); e.target.classList.add('is-in'); settle(e.target); io.unobserve(e.target); } }), { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
     groups.forEach(g => { if (!g.sec.classList.contains('is-in')) io.observe(g.sec); });
   })();
 
