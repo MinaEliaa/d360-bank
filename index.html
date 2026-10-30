@@ -1210,7 +1210,7 @@
     });
     document.querySelectorAll('[aria-label],[alt]').forEach(el => ['aria-label', 'alt'].forEach(at => { const v = el.getAttribute(at); if (v && AR[v.trim()]) el.setAttribute(at, AR[v.trim()]); }));
     // animated stages and carousels keep their left-to-right geometry
-    document.querySelectorAll('#stage,.story,.band,.why__viewport,.sv__viewport,.ml,.slots').forEach(el => el.setAttribute('dir', 'ltr'));
+    document.querySelectorAll('#stage,.story,.band,.why__viewport,.sv__viewport,.ml').forEach(el => el.setAttribute('dir', 'ltr'));
   }
   (function langMenu() {
     const box = document.getElementById('lang'), btn = document.getElementById('langBtn'), menu = document.getElementById('langMenu');
